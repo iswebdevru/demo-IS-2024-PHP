@@ -12,7 +12,6 @@
 				<?php if (!empty($_SESSION['user_id'])) : ?>
 				<li class="menu__item"><a href="newrequest.php" class="menu__link">Оставить заявку</a></li>
 				<li class="menu__item"><a href="requests.php" class="menu__link">Заявки</a></li>
-				<li class="menu__item"><a href="profile.php" class="menu__link">Личный кабинет</a></li>
 				<li class="menu__item"><a href="logout.php" class="menu__link">Выйти</a></li>
 				<?php else : ?>
 				<li class="menu__item"><a href="login.php" class="menu__link">Вход</a></li>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!empty($_SESSION['user_id'])) {
-  header('Location:./profile.php');
+  header('Location:./requests.php');
   exit;
 }
 ?>
@@ -14,10 +14,10 @@ if (!empty($_SESSION['user_id'])) {
 
   $connection = create_db_connection();
 
-  if (isset($_POST['username']) && isset($_POST['password'])) {
+  if (isset($_POST['login']) && isset($_POST['password'])) {
     try {
       $user_id = authenticate_user($connection, [
-        'username' => $_POST['username'],
+        'login' => $_POST['login'],
         'password' => $_POST['password'],
       ]);
 
@@ -27,10 +27,10 @@ if (!empty($_SESSION['user_id'])) {
         echo $user_id;
         $_SESSION['user_id'] = $user_id;
         $user = get_user($connection, $user_id);
-        if ($user['role'] === '1') {
+        if ($user['id_role'] === 2) {
           $_SESSION['is_admin'] = true;
         }
-        header('Location:./profile.php');
+        header('Location:./requests.php');
         exit;
       }
     } catch (PDOException $e) {
@@ -48,7 +48,6 @@ if (!empty($_SESSION['user_id'])) {
   <head>
     <meta charset="utf-8">
     <title>Вход</title>
-    <link rel="stylesheet" href="./static/css/style.css">
   </head>
 
   <body>
@@ -60,11 +59,11 @@ if (!empty($_SESSION['user_id'])) {
           <div class="form__body">
             <div class="form__block">
               <label for="username">Логин</label>
-              <input placeholder="copp" type="text" id="username" name="username" class="input" required>
+              <input placeholder="beauty" type="text" id="username" name="login" class="input" required>
             </div>
             <div class="form__block">
               <label for="password">Пароль</label>
-              <input placeholder="password" type="password" id="password" minlength="6" name="password" class="input" required>
+              <input placeholder="pass" type="password" id="password"  name="password" class="input" required>
             </div>
           </div>
           <button type="submit" class="form__btn btn">Войти</button>

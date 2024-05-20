@@ -6,7 +6,7 @@ if (empty($_SESSION['user_id'])) {
 }
 require_once(realpath(dirname(__FILE__)) . '/lib/db.php');
 require_once(realpath(dirname(__FILE__)) . '/lib/user.php');
-require_once(realpath(dirname(__FILE__)) . '/lib/order.php');
+require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
 
 $connection = create_db_connection();
 
@@ -22,7 +22,7 @@ try {
 	exit;
 }
 
-$orders = get_my_orders($connection)
+$orders = get_my_requests($connection)
 ?>
 
 
@@ -31,42 +31,38 @@ $orders = get_my_orders($connection)
 
 <head>
 	<meta charset="UTF-8">
-	<title>Заявления</title>
-	<link rel="stylesheet" href="./static/css/style.css">
+	<title>Заявки</title>
 </head>
 
 <body>
 	<?php include("blocks/header.php"); ?>
 	<main class="orders">
 		<div class="orders__container">
-			<h2>Заявления</h2>
+			<h2>Заявки</h2>
 			<table>
 				<thead>
 					<tr>
 						<th>№</th>
-						<th>Номер машины</th>
-						<th>Описание</th>
+						<th>Мастер</th>
 						<th>Статус</th>
+						<th>Дата бронирования</th>
 
 					</tr>
 				</thead>
+
 				<tbody>
 					<?php
+					
 					if (empty($orders)) {
 						return;
 					}
 					foreach ($orders as $item) {
 						echo "<tr>";
 						echo "<td>" . $item['id'] . "</td>";
-						echo "<td>" . $item['car_number'] . "</td>";
-						echo "	<td>" . $item['description'] . "</td>";
-						if ($item['status'] === '0') {
-							echo "<td>Новый</td>";
-						} elseif ($item['status'] === '1') {
-							echo "<td>Подтверждено</td>";
-						} elseif ($item['status'] === '2') {
-							echo "<td>Отклонено</td>";
-						}
+						echo "<td>" . $item[0] . "</td>";
+						echo "<td>" . $item[1] . "</td>";
+						echo "<td>" . $item['booking_datetime'] . "</td>";
+
 						echo "</tr>";
 					}
 					?>

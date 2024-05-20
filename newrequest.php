@@ -6,7 +6,7 @@ if (empty($_SESSION['user_id'])) {
 }
 require_once(realpath(dirname(__FILE__)) . '/lib/db.php');
 require_once(realpath(dirname(__FILE__)) . '/lib/user.php');
-require_once(realpath(dirname(__FILE__)) . '/lib/order.php');
+require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
 $connection = create_db_connection();
 try {
 	$user = get_user($connection, $_SESSION['user_id']);
@@ -18,17 +18,19 @@ try {
 	header('Location:./logout.php');
 	exit;
 }
+
+$masters = get_masters($connection)
 ?>
 
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
 	<?php
-	if (isset($_POST['car_number']) && isset($_POST['description'])) {
+	if (isset($_POST['master']) && isset($_POST['datetime'])) {
 		try {
-			create_order($connection, [
-				'car_number' => $_POST['car_number'],
-				'description' => $_POST['description'],
+			create_request($connection, [
+				'id_master' => $_POST['master'],
+				'booking_datetime' => $_POST['datetime'],
 			]);
-			header('Location:./neworder.php');
+			header('Location:./newrequest.php');
 		} catch (PDOException $e) {
 			exit("Error: " . $e->getMessage());
 		}
@@ -42,8 +44,7 @@ try {
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Написать заявление</title>
-		<link rel="stylesheet" href="./static/css/style.css">
+		<title>Оставить заявку</title>
 	</head>
 
 	<body>
@@ -52,16 +53,27 @@ try {
 		<main class="neworder">
 			<div class="neworder__container">
 				<div class="neworder__body">
-					<form method="POST" action="neworder.php" class="neworder__form form">
-						<h2>Написать заявление</h2>
+					<form method="POST" action="newrequest.php" class="neworder__form form">
+						<h2>Оставить заявку</h2>
 						<div class="form__body">
 							<div class="form__block">
-								<label for="car_number">Номер машины</label>
-								<input class="input" name="car_number" type="text">
+								<label for="car_number">Мастер</label>
+								<select required name="master" id="">
+									<?php
+
+									if (empty($masters)) {
+										echo '';
+									}
+									foreach ($masters as $master) {
+										echo "<option value='" . $master['id'] . "'>" . $master['name'] . "</option>";
+									}
+									?>
+
+								</select>
 							</div>
 							<div class="form__block">
-								<label for="description">Описание</label>
-								<textarea class="input" name="description" id="description" cols="30" rows="10"></textarea>
+								<label for="description">Время</label>
+								<input name="datetime" type="datetime-local" required>
 							</div>
 						</div>
 

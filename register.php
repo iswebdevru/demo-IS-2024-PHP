@@ -12,16 +12,12 @@ if (!empty($_SESSION['user_id'])) {
 
 	$connection = create_db_connection();
 
-	if (isset($_POST['fio']) && isset($_POST['phone']) && $_POST['email'] && isset($_POST['username']) && isset($_POST['pass']) && isset($_POST['pass2'])) {
-		if ($_POST['pass'] != $_POST['pass2']) {
-			exit("Error: пароли не совпадают");
-		}
+	if (isset($_POST['full_name']) && isset($_POST['phone']) && isset($_POST['login']) && isset($_POST['pass'])) {
 		try {
 			create_user($connection, [
-				'fio' => $_POST['fio'],
+				'full_name' => $_POST['full_name'],
 				'phone' => $_POST['phone'],
-				'email' => $_POST['email'],
-				'username' => $_POST['username'],
+				'login' => $_POST['login'],
 				'password' => $_POST['pass'],
 			]);
 		} catch (PDOException $e) {
@@ -44,7 +40,6 @@ if (!empty($_SESSION['user_id'])) {
 	<head>
 		<meta charset="UTF-8">
 		<title>Регистрация</title>
-		<link rel="stylesheet" href="./static/css/style.css">
 	</head>
 
 	<body>
@@ -57,31 +52,22 @@ if (!empty($_SESSION['user_id'])) {
 					<h2 class="form__header">Регистрация</h2>
 					<div class="form__body">
 						<div class="form__block">
-							<label class="form__input-label" for="fio">ФИО</label>
-							<input class="form__input input" type="text" id="fio" name="fio" required>
+							<label class="form__input-label" for="full_name">ФИО</label>
+							<input class="form__input input" type="text" id="full_name" name="full_name" required>
 						</div>
 						<div class="form__block">
 							<label class="form__input-label" for="phone">Номер телефона</label>
 							<input class="form__input input" type="text" id="phone" name="phone" required>
 						</div>
 						<div class="form__block">
-							<label class="form__input-label" for="email">Email</label>
-							<input class="form__input input" type="text" id="email" name="email" required>
-
-						</div>
-						<div class="form__block">
-							<label class="form__input-label" for="username">Логин</label>
-							<input class="form__input input" type="text" id="username" name="username" required>
+							<label class="form__input-label" for="login">Логин</label>
+							<input class="form__input input" type="text" id="login" name="login" required>
 
 						</div>
 						<div class="form__block">
 							<label class="form__input-label" for="pass">Пароль</label>
-							<input class="form__input input" minlength="6" type="password" id="pass" name="pass" required>
+							<input class="form__input input" type="password" id="pass" name="pass" required>
 
-						</div>
-						<div class="form__block">
-							<label class="form__input-label" for="pass2">Повторите пароль</label>
-							<input class="form__input input" minlength="6" type="password" id="pass2" name="pass2" required>
 						</div>
 					</div>
 

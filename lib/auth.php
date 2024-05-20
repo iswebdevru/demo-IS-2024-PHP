@@ -5,13 +5,14 @@
  */
 function create_user(PDO $connection, $user)
 {
-  $password = password_hash($user['password'], PASSWORD_BCRYPT);
-  $query = $connection->prepare("INSERT INTO users(fio, email, phone, username, password) VALUES (:fio, :email, :phone, :username, :password)");
-  $query->bindParam("fio", $user['fio']);
-  $query->bindParam("email", $user['email']);
-  $query->bindParam("phone", $user['phone']);
-  $query->bindParam("username", $user['username']);
-  $query->bindParam("password", $password);
+  $query = $connection->prepare("INSERT INTO user (id_role, login, password, full_name, phone) VALUES (:id_role, :login, :password, :full_name, :phone)");
+  
+  $user_role_id = 1;
+  $query->bindParam(":id_role", $user_role_id);
+  $query->bindParam(":login", $user['login']);
+  $query->bindParam(":password", $user['password']);
+  $query->bindParam(":full_name", $user['full_name']);
+  $query->bindParam(":phone", $user['phone']);
   return $query->execute();
 }
 
@@ -22,17 +23,17 @@ function create_user(PDO $connection, $user)
  */
 function authenticate_user(PDO $connection, $credentials): int|null
 {
-  $query = $connection->prepare('SELECT * FROM users WHERE username=:username LIMIT 1');
+  $query = $connection->prepare('SELECT * FROM user WHERE login=:login LIMIT 1');
   if (!$query) {
     return null;
   }
-  $query->bindParam('username', $credentials['username']);
+  $query->bindParam('login', $credentials['login']);
   $query->execute();
   $user = $query->fetch();
   if (!$user) {
     return null;
   }
-  if (password_verify($credentials['password'], $user['password'])) {
+  if ($credentials['password'] === $user['password']) {
     return $user['id'];
   }
   return null;

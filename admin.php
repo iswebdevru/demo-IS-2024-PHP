@@ -6,7 +6,7 @@ if (empty($_SESSION['user_id'])) {
 }
 require_once(realpath(dirname(__FILE__)) . '/lib/db.php');
 require_once(realpath(dirname(__FILE__)) . '/lib/user.php');
-require_once(realpath(dirname(__FILE__)) . '/lib/order.php');
+require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
 $connection = create_db_connection();
 ?>
 
@@ -14,7 +14,7 @@ $connection = create_db_connection();
 <?php
 	if (isset($_POST['status']) &&  $_POST['id']) {
 		try {
-			update_order($connection, $_POST['id'], $_POST['status']);
+			update_request($connection, $_POST['id'], $_POST['status']);
 			header('Location:./admin.php');
 			exit;
 		} catch (PDOException $e) {
@@ -40,7 +40,7 @@ $connection = create_db_connection();
 		exit;
 	}
 
-	$orders = get_all_orders($connection)
+	$requests = get_all_requests($connection)
 	?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -48,7 +48,6 @@ $connection = create_db_connection();
 <head>
 	<meta charset="UTF-8">
 	<title>Админ панель</title>
-	<link rel="stylesheet" href="./static/css/style.css">
 </head>
 
 <body>
@@ -56,46 +55,56 @@ $connection = create_db_connection();
 	<main class="orders">
 		<div class="orders__container">
 			<h2>Все заявления</h2>
-			<form action="admin.php" method="POST">
+			
 				<table>
 					<thead>
 						<tr>
 							<th>№</th>
-							<th>Номер машины</th>
-							<th>Описание</th>
-							<th>Статус</th>
 							<th>ФИО</th>
+							<th>Телефон</th>
+							<th>Дата</th>
+							<th>Мастер</th>
+							<th>Статус</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
-							if (empty($orders)) {
+							if (empty($requests)) {
 								return;
 							}
-							foreach ($orders as $item) {
+							foreach ($requests as $item) {
+								echo '<form action="admin.php" method="POST">';
 								echo "<tr>";
-								echo "<td>" . $item['id'] . "</td>";
-								echo "<td>" . $item['car_number'] . "</td>";
-								echo "	<td>" . $item['description'] . "</td>";
-								if ($item['status'] === '0') {
-									echo "<td><select onchange='this.form.submit()' name='status'>
-							<option value='0'>Новый</option>
-							<option value='1'>Подтвержденный</option>
-							<option value='2'>Отклоненный</option>
+								echo "<td>" . $item[3] . "</td>";
+								echo "	<td>" . $item[4	] . "</td>";
+								echo "	<td>" . $item[5] . "</td>";
+								echo "	<td>" . $item['booking_datetime'] . "</td>";
+								
+								echo "<td>" . $item[0] . "</td>";
+
+				
+
+								if ( $item[6] === 1) {
+									echo "<td><select  onchange='this.form.submit()' name='status'>
+							<option value='1'>Новый</option>
+							<option value='4'>Подтвержденный</option>
+							<option value='3'>Отмененный</option>
 							</select></td>";
-									echo '<input type="text" hidden name="id" value="' . $item['id'] . '">';
-								} elseif ($item['status'] === '1') {
+									echo '<input type="text" hidden name="id" value="'.$item[3].'">';
+								} 
+								elseif ( $item[6] === 3) {
+									echo "<td>Отменено</td>";
+								} elseif ($item[6] === 4) {
 									echo "<td>Подтверждено</td>";
-								} elseif ($item['status'] === '2') {
-									echo "<td>Отклонено</td>";
 								}
-								echo "	<td>" . $item['fio'] . "</td>";
+								
 								echo "</tr>";
+								echo "</form>";
 							}
 							?>
 					</tbody>
 				</table>
-			</form>
+			
 
 		</div>
 	</main>

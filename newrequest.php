@@ -19,18 +19,19 @@ try {
 	exit;
 }
 
-$masters = get_masters($connection)
+$products = get_products($connection)
 ?>
 
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
 	<?php
-	if (isset($_POST['master']) && isset($_POST['datetime'])) {
+	if (isset($_POST['product']) && isset($_POST['count']) && isset($_POST['address'])) {
 		try {
 			create_request($connection, [
-				'id_master' => $_POST['master'],
-				'booking_datetime' => $_POST['datetime'],
+				'id_product' => $_POST['product'],
+				'address' => $_POST['address'],
+				'count' => $_POST['count'],
 			]);
-			header('Location:./newrequest.php');
+			header('Location:./requests.php');
 		} catch (PDOException $e) {
 			exit("Error: " . $e->getMessage());
 		}
@@ -57,23 +58,27 @@ $masters = get_masters($connection)
 						<h2>Оставить заявку</h2>
 						<div class="form__body">
 							<div class="form__block">
-								<label for="car_number">Мастер</label>
-								<select required name="master" id="">
+								<label for="product">Продукт</label>
+								<select required name="product" id="product">
 									<?php
 
-									if (empty($masters)) {
+									if (empty($products)) {
 										echo '';
 									}
-									foreach ($masters as $master) {
-										echo "<option value='" . $master['id'] . "'>" . $master['name'] . "</option>";
+									foreach ($products as $product) {
+										echo "<option value='" . $product['id'] . "'>" . $product['name'] . "</option>";
 									}
 									?>
 
 								</select>
 							</div>
 							<div class="form__block">
-								<label for="description">Время</label>
-								<input name="datetime" type="datetime-local" required>
+								<label for="count">Кол-во</label>
+								<input id="count" name="count" type="number" min="0" required>
+							</div>
+							<div class="form__block">
+								<label for="address">Адрес</label>
+								<input name="address" type="text" required>
 							</div>
 						</div>
 

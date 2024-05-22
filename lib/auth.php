@@ -5,9 +5,10 @@
  */
 function create_user(PDO $connection, $user)
 {
-  $query = $connection->prepare("INSERT INTO user (id_role, login, password, full_name, phone) VALUES (:id_role, :login, :password, :full_name, :phone)");
+  $query = $connection->prepare("INSERT INTO user (email, id_role, login, password, full_name, phone) VALUES (:email, :id_role, :login, :password, :full_name, :phone)");
   
   $user_role_id = 1;
+  $query->bindParam(":email", $user['email']);
   $query->bindParam(":id_role", $user_role_id);
   $query->bindParam(":login", $user['login']);
   $query->bindParam(":password", $user['password']);

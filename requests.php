@@ -10,7 +10,6 @@ require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
 
 $connection = create_db_connection();
 
-
 try {
 	$user = get_user($connection, $_SESSION['user_id']);
 	if (!$user) {
@@ -38,21 +37,20 @@ $orders = get_my_requests($connection)
 	<?php include("blocks/header.php"); ?>
 	<main class="orders">
 		<div class="orders__container">
-			<h2>Заявки</h2>
+			<h2>Заказы</h2>
 			<table>
 				<thead>
 					<tr>
 						<th>№</th>
-						<th>Мастер</th>
+						<th>Продукт</th>
+						<th>Кол-во</th>
 						<th>Статус</th>
-						<th>Дата бронирования</th>
-
+						<th>Адрес</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<?php
-					
 					if (empty($orders)) {
 						return;
 					}
@@ -60,8 +58,9 @@ $orders = get_my_requests($connection)
 						echo "<tr>";
 						echo "<td>" . $item['id'] . "</td>";
 						echo "<td>" . $item[0] . "</td>";
+						echo "<td>" . $item[2] . "</td>";
 						echo "<td>" . $item[1] . "</td>";
-						echo "<td>" . $item['booking_datetime'] . "</td>";
+						echo "<td>" . $item['address'] . "</td>";
 
 						echo "</tr>";
 					}
@@ -73,4 +72,3 @@ $orders = get_my_requests($connection)
 </body>
 
 </html>
-

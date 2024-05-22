@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Авг 10 2023 г., 03:57
+-- Время создания: Авг 09 2023 г., 08:08
 -- Версия сервера: 10.4.27-MariaDB
 -- Версия PHP: 8.2.0
 
@@ -18,47 +18,50 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `v4`
+-- База данных: `v1`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `master`
+-- Структура таблицы `order`
 --
 
-CREATE TABLE `master` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `master`
---
-
-INSERT INTO `master` (`id`, `name`) VALUES
-(1, 'Иванова Д.Д.');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `request`
---
-
-CREATE TABLE `request` (
+CREATE TABLE `order` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `id_master` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `id_status` int(11) NOT NULL,
-  `booking_datetime` datetime DEFAULT NULL
+  `count` int(11) NOT NULL DEFAULT 0,
+  `address` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Дамп данных таблицы `request`
+-- Дамп данных таблицы `order`
 --
 
-INSERT INTO `request` (`id`, `id_user`, `id_master`, `id_status`, `booking_datetime`) VALUES
-(3, 3, 1, 1, '2023-08-21 10:00:00');
+INSERT INTO `order` (`id`, `id_user`, `id_product`, `id_status`, `count`, `address`) VALUES
+(1, 3, 1, 1, 12, 'Адресс'),
+(2, 3, 1, 2, 1, 'Адрес');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `product`
+--
+
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` decimal(10,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `product`
+--
+
+INSERT INTO `product` (`id`, `name`, `price`) VALUES
+(1, 'Пример товара', '10000');
 
 -- --------------------------------------------------------
 
@@ -98,8 +101,8 @@ CREATE TABLE `status` (
 
 INSERT INTO `status` (`id`, `code`, `name`) VALUES
 (1, 'new', 'Новое'),
-(3, 'canceled', 'Отменено'),
-(4, 'confirmed', 'Подтверждено');
+(2, 'confirmed', 'Подтверждено'),
+(3, 'canceled', 'Отменено');
 
 -- --------------------------------------------------------
 
@@ -113,34 +116,35 @@ CREATE TABLE `user` (
   `login` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `full_name` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL
+  `phone` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `user`
 --
 
-INSERT INTO `user` (`id`, `id_role`, `login`, `password`, `full_name`, `phone`) VALUES
-(3, 1, 'user', 'user', 'Иванов Иван Иванович', '91111111111');
+INSERT INTO `user` (`id`, `id_role`, `login`, `password`, `full_name`, `phone`, `email`) VALUES
+(3, 1, 'user', 'user', 'Иванов Иван Иванович', '91111111111', 'user@user.ru');
 
 --
 -- Индексы сохранённых таблиц
 --
 
 --
--- Индексы таблицы `master`
+-- Индексы таблицы `order`
 --
-ALTER TABLE `master`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `request`
---
-ALTER TABLE `request`
+ALTER TABLE `order`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_status` (`id_status`),
-  ADD KEY `id_master` (`id_master`) USING BTREE;
+  ADD KEY `id_product` (`id_product`),
+  ADD KEY `id_status` (`id_status`);
+
+--
+-- Индексы таблицы `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `role`
@@ -166,16 +170,16 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT для таблицы `master`
+-- AUTO_INCREMENT для таблицы `order`
 --
-ALTER TABLE `master`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT для таблицы `request`
+-- AUTO_INCREMENT для таблицы `product`
 --
-ALTER TABLE `request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `role`
@@ -187,7 +191,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT для таблицы `status`
 --
 ALTER TABLE `status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `user`
@@ -200,12 +204,12 @@ ALTER TABLE `user`
 --
 
 --
--- Ограничения внешнего ключа таблицы `request`
+-- Ограничения внешнего ключа таблицы `order`
 --
-ALTER TABLE `request`
-  ADD CONSTRAINT `request_ibfk_1` FOREIGN KEY (`id_master`) REFERENCES `master` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `request_ibfk_2` FOREIGN KEY (`id_status`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `request_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `order`
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`id_status`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `user`

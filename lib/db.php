@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Подключение к базе данных MySQL с использованием интерфейса PDO
- */
 function create_db_connection()
 {
   $DB_HOST = 'localhost';

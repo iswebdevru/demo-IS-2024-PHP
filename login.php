@@ -59,11 +59,11 @@ if (!empty($_SESSION['user_id'])) {
           <div class="form__body">
             <div class="form__block">
               <label for="username">Логин</label>
-              <input placeholder="beauty" type="text" id="username" name="login" class="input" required>
+              <input placeholder="sklad" type="text" id="username" name="login" class="input" required>
             </div>
             <div class="form__block">
               <label for="password">Пароль</label>
-              <input placeholder="pass" type="password" id="password"  name="password" class="input" required>
+              <input placeholder="123qwe" type="password" id="password"  name="password" class="input" required>
             </div>
           </div>
           <button type="submit" class="form__btn btn">Войти</button>

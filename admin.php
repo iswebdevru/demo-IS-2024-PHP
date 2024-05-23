@@ -51,7 +51,7 @@ $connection = create_db_connection();
 	</head>
 
 	<body>
-		<?php include("blocks/header.php"); ?>
+		<?php include("components/header.php"); ?>
 		<main class="orders">
 			<div class="orders__container">
 				<h2>Все заявления</h2>
@@ -61,9 +61,10 @@ $connection = create_db_connection();
 						<tr>
 							<th>№</th>
 							<th>ФИО</th>
+							<th>Телефон</th>
 							<th>Email</th>
-							<th>Товар</th>
-							<th>Кол-во</th>
+							<th>Авто</th>
+							<th>Дата бронирования</th>
 							<th>Статус</th>
 						</tr>
 					</thead>
@@ -75,29 +76,30 @@ $connection = create_db_connection();
 						foreach ($requests as $item) {
 							echo '<form action="admin.php" method="POST">';
 							echo "<tr>";
-							echo "<td>" . $item[4] . "</td>";
+							echo "<td>" . $item[3] . "</td>";
+							echo "	<td>" . $item[4] . "</td>";
 							echo "	<td>" . $item[5] . "</td>";
 							echo "	<td>" . $item[6] . "</td>";
 							echo "<td>" . $item[0] . "f</td>";
 							echo "	<td>" . $item[2] . "</td>";
 
-							echo '<input type="text" hidden name="id" value="' . $item[4] . '">';
-							if ($item['id'] === 1) {
+							echo '<input type="text" hidden name="id" value="' . $item[3] . '">';
+							if ($item[7] === 1) {
 								echo "<td><select  onchange='this.form.submit()' name='status'>
 							<option value='1' selected>Новый</option>
-							<option value='2'>Подтвержденный</option>
+							<option value='4'>Подтвержденный</option>
 							<option value='3'>Отмененный</option>
 							</select></td>";
-							} elseif ($item['id'] === 3) {
+							} elseif ($item[7] === 3) {
 								echo "<td><select  onchange='this.form.submit()' name='status'>
 							<option value='1'>Новый</option>
-							<option value='2' >Подтвержденный</option>
+							<option value='4' >Подтвержденный</option>
 							<option value='3' selected>Отмененный</option>
 							</select></td>";
-							} elseif ($item['id'] === 2) {
+							} elseif ($item[7] === 4) {
 								echo "<td><select  onchange='this.form.submit()' name='status'>
 							<option value='1'>Новый</option>
-							<option value='2' selected>Подтвержденный</option>
+							<option value='4' selected>Подтвержденный</option>
 							<option value='3'>Отмененный</option>
 							</select></td>";
 							}

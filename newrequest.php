@@ -19,17 +19,16 @@ try {
 	exit;
 }
 
-$products = get_products($connection)
+$cars = get_cars($connection)
 ?>
 
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
 	<?php
-	if (isset($_POST['product']) && isset($_POST['count']) && isset($_POST['address'])) {
+	if (isset($_POST['car']) && isset($_POST['date'])) {
 		try {
 			create_request($connection, [
-				'id_product' => $_POST['product'],
-				'address' => $_POST['address'],
-				'count' => $_POST['count'],
+				'id_car' => $_POST['car'],
+				'booking_date' => $_POST['date'],
 			]);
 			header('Location:./requests.php');
 		} catch (PDOException $e) {
@@ -45,41 +44,38 @@ $products = get_products($connection)
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Оставить заявку</title>
+		<title>Сформировать заявку</title>
 	</head>
 
 	<body>
-		<?php include("blocks/header.php"); ?>
+		<?php include("components/header.php"); ?>
 
 		<main class="neworder">
 			<div class="neworder__container">
 				<div class="neworder__body">
 					<form method="POST" action="newrequest.php" class="neworder__form form">
-						<h2>Оставить заявку</h2>
+						<h2>Сформировать заявку</h2>
 						<div class="form__body">
 							<div class="form__block">
-								<label for="product">Продукт</label>
-								<select required name="product" id="product">
+								<label for="product">Авто</label>
+								<select required name="car" id="car">
 									<?php
 
-									if (empty($products)) {
+									if (empty($cars)) {
 										echo '';
 									}
-									foreach ($products as $product) {
-										echo "<option value='" . $product['id'] . "'>" . $product['name'] . "</option>";
+									foreach ($cars as $car) {
+										echo "<option value='" . $car['id'] . "'>" . $car['name'] . "</option>";
 									}
 									?>
 
 								</select>
 							</div>
 							<div class="form__block">
-								<label for="count">Кол-во</label>
-								<input id="count" name="count" type="number" min="0" required>
+								<label for="date">Дата</label>
+								<input id="date" name="date" type="date" min="0" required>
 							</div>
-							<div class="form__block">
-								<label for="address">Адрес</label>
-								<input name="address" type="text" required>
-							</div>
+							
 						</div>
 
 						<button type="submit" class="form__btn btn">Отправить</button>

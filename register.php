@@ -12,12 +12,12 @@ if (!empty($_SESSION['user_id'])) {
 
 	$connection = create_db_connection();
 
-	if (isset($_POST['email']) && isset($_POST['full_name']) && isset($_POST['phone']) && isset($_POST['login']) && isset($_POST['pass'])) {
+	if (isset($_POST['email']) && isset($_POST['full_name']) && isset($_POST['phone']) && isset($_POST['driver_license']) && isset($_POST['pass'])) {
 		try {
 			create_user($connection, [
 				'full_name' => $_POST['full_name'],
 				'phone' => $_POST['phone'],
-				'login' => $_POST['login'],
+				'driver_license' => $_POST['driver_license'],
 				'password' => $_POST['pass'],
 				'email' => $_POST['email'],
 			]);
@@ -44,7 +44,7 @@ if (!empty($_SESSION['user_id'])) {
 	</head>
 
 	<body>
-		<?php include("blocks/header.php"); ?>
+		<?php include("components/header.php"); ?>
 
 		<div class="register">
 			<div class="register__container">
@@ -52,25 +52,24 @@ if (!empty($_SESSION['user_id'])) {
 
 					<h2 class="form__header">Регистрация</h2>
 					<div class="form__body">
-						<div class="form__block">
-							<label class="form__input-label" for="login">Логин</label>
-							<input class="form__input input" type="text" id="login" name="login" required>
-
-						</div>
-						<div class="form__block">
+						<div>
 							<label class="form__input-label" for="full_name">ФИО</label>
 							<input class="form__input input" type="text" id="full_name" name="full_name" required>
 						</div>
-						<div class="form__block">
+						<div>
+							<label class="form__input-label" for="email">Email</label>
+							<input class="form__input input" type="text" id="email" name="email" required>
+						</div>
+						<div>
 							<label class="form__input-label" for="phone">Номер телефона</label>
 							<input class="form__input input" type="text" id="phone" name="phone" required>
 						</div>
-						<div class="form__block">
-							<label class="form__input-label" for="email">Email</label>
-							<input class="form__input input" type="email" id="email" name="email" required>
+						<div>
+							<label class="form__input-label" for="driver_license">Водительское удостоверение</label>
+							<input class="form__input input" type="text" id="driver_license" name="driver_license" required>
 						</div>
 
-						<div class="form__block">
+						<div>
 							<label class="form__input-label" for="pass">Пароль</label>
 							<input class="form__input input" type="password" id="pass" name="pass" required>
 

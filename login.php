@@ -14,10 +14,10 @@ if (!empty($_SESSION['user_id'])) {
 
   $connection = create_db_connection();
 
-  if (isset($_POST['login']) && isset($_POST['password'])) {
+  if (isset($_POST['email']) && isset($_POST['password'])) {
     try {
       $user_id = authenticate_user($connection, [
-        'login' => $_POST['login'],
+        'email' => $_POST['email'],
         'password' => $_POST['password'],
       ]);
 
@@ -51,19 +51,19 @@ if (!empty($_SESSION['user_id'])) {
   </head>
 
   <body>
-    <?php include("blocks/header.php"); ?>
+    <?php include("components/header.php"); ?>
     <div class="login">
       <div class="login__container">
         <form class="login__form form" action="./login.php" method="post">
           <h2 class="form__header">Авторизация</h2>
           <div class="form__body">
             <div class="form__block">
-              <label for="username">Логин</label>
-              <input placeholder="sklad" type="text" id="username" name="login" class="input" required>
+              <label for="email">Email</label>
+              <input placeholder="car" type="text" id="email" name="email" class="input" required>
             </div>
             <div class="form__block">
               <label for="password">Пароль</label>
-              <input placeholder="123qwe" type="password" id="password"  name="password" class="input" required>
+              <input placeholder="carforme" type="password" id="password"  name="password" class="input" required>
             </div>
           </div>
           <button type="submit" class="form__btn btn">Войти</button>

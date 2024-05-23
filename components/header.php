@@ -1,7 +1,7 @@
 <header class="header">
 	<div class="header__container">
 		<div class="header__logo logo">
-			<span class="logo__title"><a class="logo__link" href="/">Авоська</a></span>
+			<span class="logo__title"><a class="logo__link" href="/">Эх, прокачу</a></span>
 
 		</div>
 		<nav class="header__nav">
@@ -10,8 +10,8 @@
 					<li class="menu__item"><a href="admin.php" class="menu__link">Админ</a></li>
 				<?php endif; ?>
 				<?php if (!empty($_SESSION['user_id'])) : ?>
-					<li class="menu__item"><a href="newrequest.php" class="menu__link">Сделать заказ</a></li>
-					<li class="menu__item"><a href="requests.php" class="menu__link">Мои заказы</a></li>
+					<li class="menu__item"><a href="newrequest.php" class="menu__link">Сформировать заявку</a></li>
+					<li class="menu__item"><a href="requests.php" class="menu__link">Мои заявки</a></li>
 					<li class="menu__item"><a href="logout.php" class="menu__link">Выйти</a></li>
 				<?php else : ?>
 					<li class="menu__item"><a href="login.php" class="menu__link">Вход</a></li>

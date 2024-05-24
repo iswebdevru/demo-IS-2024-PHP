@@ -62,9 +62,9 @@ $connection = create_db_connection();
 							<th>№</th>
 							<th>ФИО</th>
 							<th>Телефон</th>
-							<th>Email</th>
-							<th>Авто</th>
 							<th>Дата бронирования</th>
+							<th>Авто</th>
+							<th>Проблема</th>
 							<th>Статус</th>
 						</tr>
 					</thead>
@@ -76,14 +76,15 @@ $connection = create_db_connection();
 						foreach ($requests as $item) {
 							echo '<form action="admin.php" method="POST">';
 							echo "<tr>";
+							echo "	<td>" . $item[2] . "</td>";
+						
 							echo "<td>" . $item[3] . "</td>";
 							echo "	<td>" . $item[4] . "</td>";
-							echo "	<td>" . $item[5] . "</td>";
+							echo "	<td>" . $item[1] . "</td>";
 							echo "	<td>" . $item[6] . "</td>";
-							echo "<td>" . $item[0] . "f</td>";
-							echo "	<td>" . $item[2] . "</td>";
+							echo "	<td>" . $item[5] . "</td>";
 
-							echo '<input type="text" hidden name="id" value="' . $item[3] . '">';
+							echo '<input type="text" hidden name="id" value="' . $item[2] . '">';
 							if ($item[7] === 1) {
 								echo "<td><select  onchange='this.form.submit()' name='status'>
 							<option value='1' selected>Новый</option>

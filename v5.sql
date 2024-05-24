@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Авг 10 2023 г., 04:01
+-- Время создания: Авг 10 2023 г., 03:49
 -- Версия сервера: 10.4.27-MariaDB
 -- Версия PHP: 8.2.0
 
@@ -18,26 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `v3`
+-- База данных: `v5`
 --
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `car`
---
-
-CREATE TABLE `car` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `car`
---
-
-INSERT INTO `car` (`id`, `name`) VALUES
-(1, 'Пример автомобиля');
 
 -- --------------------------------------------------------
 
@@ -48,18 +30,18 @@ INSERT INTO `car` (`id`, `name`) VALUES
 CREATE TABLE `request` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `id_car` int(11) NOT NULL,
+  `auto` varchar(255) NOT NULL,
+  `problem` text NOT NULL,
   `id_status` int(11) NOT NULL,
-  `booking_date` date DEFAULT NULL
+  `booking_datetime` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `request`
 --
 
-INSERT INTO `request` (`id`, `id_user`, `id_car`, `id_status`, `booking_date`) VALUES
-(3, 3, 1, 1, '2023-08-17'),
-(4, 3, 1, 3, '2023-08-25');
+INSERT INTO `request` (`id`, `id_user`, `auto`, `problem`, `id_status`, `booking_datetime`) VALUES
+(5, 3, 'Лада Гранта', 'Не заводится', 1, '2023-08-24 08:48:39');
 
 -- --------------------------------------------------------
 
@@ -111,29 +93,22 @@ INSERT INTO `status` (`id`, `code`, `name`) VALUES
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `id_role` int(11) NOT NULL,
+  `login` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `full_name` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `driver_license` varchar(255) NOT NULL
+  `phone` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `user`
 --
 
-INSERT INTO `user` (`id`, `id_role`, `password`, `full_name`, `phone`, `email`, `driver_license`) VALUES
-(3, 1, 'user', 'Иванов Иван Иванович', '91111111111', 'user@user.ru', '11 11 111111');
+INSERT INTO `user` (`id`, `id_role`, `login`, `password`, `full_name`, `phone`) VALUES
+(3, 1, 'user', 'user', 'Иванов Иван Иванович', '91111111111');
 
 --
 -- Индексы сохранённых таблиц
 --
-
---
--- Индексы таблицы `car`
---
-ALTER TABLE `car`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `request`
@@ -141,8 +116,7 @@ ALTER TABLE `car`
 ALTER TABLE `request`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_status` (`id_status`),
-  ADD KEY `id_car` (`id_car`) USING BTREE;
+  ADD KEY `id_status` (`id_status`);
 
 --
 -- Индексы таблицы `role`
@@ -168,16 +142,10 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT для таблицы `car`
---
-ALTER TABLE `car`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT для таблицы `request`
 --
 ALTER TABLE `request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `role`
@@ -205,7 +173,6 @@ ALTER TABLE `user`
 -- Ограничения внешнего ключа таблицы `request`
 --
 ALTER TABLE `request`
-  ADD CONSTRAINT `request_ibfk_1` FOREIGN KEY (`id_car`) REFERENCES `car` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `request_ibfk_2` FOREIGN KEY (`id_status`) REFERENCES `status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `request_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

@@ -14,10 +14,10 @@ if (!empty($_SESSION['user_id'])) {
 
   $connection = create_db_connection();
 
-  if (isset($_POST['email']) && isset($_POST['password'])) {
+  if (isset($_POST['login']) && isset($_POST['password'])) {
     try {
       $user_id = authenticate_user($connection, [
-        'email' => $_POST['email'],
+        'login' => $_POST['login'],
         'password' => $_POST['password'],
       ]);
 
@@ -58,12 +58,12 @@ if (!empty($_SESSION['user_id'])) {
           <h2 class="form__header">Авторизация</h2>
           <div class="form__body">
             <div class="form__block">
-              <label for="email">Email</label>
-              <input placeholder="car" type="text" id="email" name="email" class="input" required>
+              <label for="login">Логин</label>
+              <input placeholder="newfit" type="text" id="login" name="login" class="input" required>
             </div>
             <div class="form__block">
               <label for="password">Пароль</label>
-              <input placeholder="carforme" type="password" id="password"  name="password" class="input" required>
+              <input placeholder="qsw123" type="password" id="password"  name="password" class="input" required>
             </div>
           </div>
           <button type="submit" class="form__btn btn">Войти</button>

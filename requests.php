@@ -1,13 +1,13 @@
 <?php
-require_once(realpath(dirname(__FILE__)) . '/lib/db.php');
-require_once(realpath(dirname(__FILE__)) . '/lib/user.php');
-require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
+
 session_start();
 if (empty($_SESSION['user_id'])) {
 	header('Location:./login.php');
 	exit;
 }
-
+require_once(realpath(dirname(__FILE__)) . '/lib/db.php');
+require_once(realpath(dirname(__FILE__)) . '/lib/user.php');
+require_once(realpath(dirname(__FILE__)) . '/lib/request.php');
 
 $connection = create_db_connection();
 
@@ -22,7 +22,7 @@ try {
 	exit;
 }
 
-$orders = get_my_requests($connection)
+$requests = get_my_requests($connection)
 ?>
 
 
@@ -45,6 +45,7 @@ $orders = get_my_requests($connection)
 						<th>№</th>
 						<th>Автомобиль</th>
 						<th>Дата бронирования</th>
+						<th>Проблема</th>
 						<th>Статус</th>
 						
 					</tr>
@@ -52,15 +53,17 @@ $orders = get_my_requests($connection)
 
 				<tbody>
 					<?php
-					if (empty($orders)) {
+	
+					if (empty($requests)) {
 						return;
 					}
-					foreach ($orders as $item) {
+					foreach ($requests as $item) {
 						echo "<tr>";
 						echo "<td>" . $item['id'] . "</td>";
 						echo "<td>" . $item[0] . "</td>";
 						echo "<td>" . $item[2] . "</td>";
 						echo "<td>" . $item[1] . "</td>";
+						echo "<td>" . $item[4] . "</td>";
 						
 
 						echo "</tr>";

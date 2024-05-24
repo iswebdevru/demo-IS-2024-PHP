@@ -12,14 +12,14 @@ if (!empty($_SESSION['user_id'])) {
 
 	$connection = create_db_connection();
 
-	if (isset($_POST['email']) && isset($_POST['full_name']) && isset($_POST['phone']) && isset($_POST['driver_license']) && isset($_POST['pass'])) {
+	if (isset($_POST['login']) && isset($_POST['full_name']) && isset($_POST['phone']) && isset($_POST['pass'])) {
 		try {
 			create_user($connection, [
 				'full_name' => $_POST['full_name'],
 				'phone' => $_POST['phone'],
 				'driver_license' => $_POST['driver_license'],
 				'password' => $_POST['pass'],
-				'email' => $_POST['email'],
+				'login' => $_POST['login'],
 			]);
 		} catch (PDOException $e) {
 			if ($e->getCode() == 23000) {
@@ -57,16 +57,12 @@ if (!empty($_SESSION['user_id'])) {
 							<input class="form__input input" type="text" id="full_name" name="full_name" required>
 						</div>
 						<div>
-							<label class="form__input-label" for="email">Email</label>
-							<input class="form__input input" type="text" id="email" name="email" required>
+							<label class="form__input-label" for="login">Логин</label>
+							<input class="form__input input" type="text" id="login" name="login" required>
 						</div>
 						<div>
 							<label class="form__input-label" for="phone">Номер телефона</label>
 							<input class="form__input input" type="text" id="phone" name="phone" required>
-						</div>
-						<div>
-							<label class="form__input-label" for="driver_license">Водительское удостоверение</label>
-							<input class="form__input input" type="text" id="driver_license" name="driver_license" required>
 						</div>
 
 						<div>

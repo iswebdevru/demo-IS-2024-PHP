@@ -1,7 +1,7 @@
 <header class="header">
 	<div class="header__container">
 		<div class="header__logo logo">
-			<span class="logo__title"><a class="logo__link" href="/">Эх, прокачу</a></span>
+			<span class="logo__title"><a class="logo__link" href="/">Починим!</a></span>
 
 		</div>
 		<nav class="header__nav">

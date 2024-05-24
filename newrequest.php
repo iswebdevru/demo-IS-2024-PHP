@@ -19,16 +19,16 @@ try {
 	exit;
 }
 
-$cars = get_cars($connection)
 ?>
 
 <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') : ?>
 	<?php
-	if (isset($_POST['car']) && isset($_POST['date'])) {
+	if (isset($_POST['auto']) && isset($_POST['problem']) && isset($_POST['date'])) {
 		try {
 			create_request($connection, [
-				'id_car' => $_POST['car'],
-				'booking_date' => $_POST['date'],
+				'auto' => $_POST['auto'],
+				'booking_datetime' => $_POST['date'],
+				'problem' => $_POST['problem'],
 			]);
 			header('Location:./requests.php');
 		} catch (PDOException $e) {
@@ -57,23 +57,16 @@ $cars = get_cars($connection)
 						<h2>Сформировать заявку</h2>
 						<div class="form__body">
 							<div class="form__block">
-								<label for="product">Авто</label>
-								<select required name="car" id="car">
-									<?php
-
-									if (empty($cars)) {
-										echo '';
-									}
-									foreach ($cars as $car) {
-										echo "<option value='" . $car['id'] . "'>" . $car['name'] . "</option>";
-									}
-									?>
-
-								</select>
+								<label for="auto">Авто</label>
+								<input required type="text" name="auto" id="auto">
+							</div>
+							<div class="form__block">
+								<label for="problem">Проблема</label>
+								<input required type="text" name="problem" id="problem">
 							</div>
 							<div class="form__block">
 								<label for="date">Дата</label>
-								<input id="date" name="date" type="date" min="0" required>
+								<input id="date" name="date" type="datetime-local"  required>
 							</div>
 							
 						</div>

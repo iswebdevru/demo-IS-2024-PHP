@@ -14,9 +14,10 @@ function get_cars(PDO $connection)
 function create_request(PDO $connection, $request)
 {
 	$status_new = 1;
-	$query = $connection->prepare("INSERT INTO request(booking_date, id_car, id_user, id_status) VALUES (:booking_date, :id_car, :id_user, :id_status);");
-	$query->bindParam("id_car", $request['id_car']);
-	$query->bindParam("booking_date", $request['booking_date']);
+	$query = $connection->prepare("INSERT INTO request(booking_datetime, auto, id_user, id_status, problem) VALUES (:booking_datetime, :auto, :id_user, :id_status, :problem);");
+	$query->bindParam("auto", $request['auto']);
+	$query->bindParam("problem", $request['problem']);
+	$query->bindParam("booking_datetime", $request['booking_datetime']);
 	$query->bindParam("id_user", $_SESSION['user_id']);
 	$query->bindParam("id_status", $status_new);
 	return $query->execute();
@@ -24,26 +25,26 @@ function create_request(PDO $connection, $request)
 
 function get_my_requests(PDO $connection)
 {
-	$query = $connection->prepare('SELECT car.name,  status.name, request.booking_date, request.id FROM request LEFT join	status on status.id = request.id_status LEFT join car on car.id = request.id_car WHERE request.id_user = :user_id ;');
+	$query = $connection->prepare('SELECT   request.auto, request.problem, request.booking_datetime, request.id, status.name FROM request LEFT join	status on status.id = request.id_status WHERE request.id_user = :user_id ;');
 	$query->bindParam('user_id', $_SESSION['user_id']);
 	$query->execute();
-	$cars = $query->fetchAll();
-	if (!$cars) {
+	$requests = $query->fetchAll();
+	if (!$requests) {
 		return null;
 	}
-	return $cars;
+	return $requests;
 }
 
 
 function get_all_requests(PDO $connection)
 {
-	$query = $connection->prepare('SELECT car.name, status.name ,request.booking_date, request.id, user.full_name, user.phone ,  user.email, status.id FROM request LEFT join	status on status.id = request.id_status LEFT join car on car.id = request.id_car  LEFT join user on user.id = request.id_user;');
+	$query = $connection->prepare('SELECT  status.name ,request.booking_datetime, request.id, user.full_name, user.phone ,  request.problem, request.auto, status.id FROM request LEFT join	status on status.id = request.id_status  LEFT join user on user.id = request.id_user;');
 	$query->execute();
-	$cars = $query->fetchAll();
-	if (!$cars) {
+	$requests = $query->fetchAll();
+	if (!$requests) {
 		return null;
 	}
-	return $cars;
+	return $requests;
 }
 
 
